@@ -13,6 +13,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSortModule } from '@angular/material/sort';
 
 const modules = [
   MatToolbarModule,
@@ -29,6 +33,11 @@ const modules = [
   MatNativeDateModule,
   MatRadioModule,
   MatDialogModule,
+  MatAutocompleteModule,
+  ReactiveFormsModule,
+  FormsModule,
+  MatChipsModule,
+  MatSortModule,
 ];
 @NgModule({
   imports: [modules],

@@ -6,9 +6,10 @@ import { MaintenanceRoutingModule } from './maintenance-routing.module';
 import { MaintenanceComponent } from './maintenance.component';
 import { AddAgentComponent } from './components/add-agent/add-agent.component';
 import { AddModelComponent } from './components/add-model/add-model.component';
+import { AddNewModelComponent } from './components/add-new-model/add-new-model.component';
 
 @NgModule({
-  declarations: [MaintenanceComponent, AddAgentComponent, AddModelComponent],
+  declarations: [MaintenanceComponent, AddAgentComponent, AddModelComponent, AddNewModelComponent],
   imports: [CommonModule, MaintenanceRoutingModule, MaterialModule],
 })
 export class MaintenanceModule {}

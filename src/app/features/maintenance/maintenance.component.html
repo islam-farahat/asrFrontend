@@ -4,32 +4,139 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="container-fluid pt-1">
+<div class="container-fluid pt-1 px-0">
   <div class="nav-size"></div>
-  <div class="d-flex justify-content-center">
-    <mat-stepper horizontal="horizontal" class="w-100">
-      <mat-step>
-        <ng-template matStepLabel>الموديلات</ng-template>
-        <ng-template matStepContent>
-          <div class="row mt-1 mx-2">
-            <div class="col-5">
-              <div class="d-flex">
-                <a class="hand" (click)="addModel()">
-                  <mat-icon color="primary" class="fs-3 mt-3 me-1"
-                    >add</mat-icon
+  <mat-stepper horizontal="horizontal" class="w-100">
+    <mat-step>
+      <ng-template matStepLabel>الموديلات</ng-template>
+      <ng-template matStepContent>
+        <div class="d-flex justify-content-center mt-3 mx-2">
+          <div class="w-75">
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource3" matSort #matSort3>
+                <ng-container matColumnDef="id">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
                   >
-                </a>
-                <mat-form-field appearance="outline">
-                  <mat-label>الموديل</mat-label>
-                  <mat-select>
-                    <mat-option value="1"> HP </mat-option>
-                    <mat-option value="1"> Dell </mat-option>
-                    <mat-option value="1"> Apple </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
+                    #
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الاسم
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="description">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الوصف
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.description }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="attache">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الملحقات
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.attache }}</td>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    حذف
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <button type="button" mat-icon-button>
+                      <mat-icon color="warn">delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns3"
+                ></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                  <td
+                    class="mat-cell text-secondary display-1 fs-6 px-2"
+                    colspan="4"
+                  >
+                    لا يوجد بيانات مطابقة للبحث
+                  </td>
+                </tr>
+              </table>
+
+              <mat-paginator
+                paginator3
+                [showFirstLastButtons]="true"
+                previousPageLabel="السابق"
+                nextPageLabel="التالي"
+                itemsPerPageLabel="عدد العناصر"
+                lastPageLabel="الاخير"
+                firstPageLabel="الاول"
+                [hidePageSize]="true"
+                [pageSize]="5"
+              ></mat-paginator>
+            </div>
+          </div>
+        </div>
+
+        <button
+          mat-fab
+          color="primary"
+          class="position-fixed bottom-0 start-0 m-3"
+          (click)="addModel()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </ng-template>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>اضافة</ng-template>
+      <ng-template matStepContent>
+        <div class="row">
+          <div class="row col-5">
+            <div class="col-12">
+              <mat-form-field appearance="outline">
+                <mat-label>بحث</mat-label>
+                <input
+                  matInput
+                  (keyup)="modelsFilter($event)"
+                  placeholder="مثال . كارت شاشة"
+                  #input2
+                />
+              </mat-form-field>
               <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" matSort1>
+                <table mat-table [dataSource]="dataSource" matSort #matSort1>
                   <ng-container matColumnDef="id">
                     <th
                       class="text-secondary display-1 fs-5"
@@ -88,6 +195,21 @@
                     </th>
                     <td mat-cell *matCellDef="let row">{{ row.price }}</td>
                   </ng-container>
+                  <ng-container matColumnDef="add">
+                    <th
+                      class="text-secondary display-1 fs-5"
+                      mat-header-cell
+                      *matHeaderCellDef
+                      mat-sort-header
+                    >
+                      اضافة
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <button type="button" mat-icon-button>
+                        <mat-icon color="primary">add</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr
                     mat-row
@@ -117,394 +239,263 @@
                 ></mat-paginator>
               </div>
             </div>
-            <div class="col-7">
-              <mat-form-field appearance="outline">
-                <mat-label>بحث</mat-label>
-                <input
-                  matInput
-                  (keyup)="categoryFilter($event)"
-                  placeholder="مثال . كارت شاشة"
-                  #input
-                />
+          </div>
+          <div class="row col-7">
+            <div class="col-6">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>الباركود</mat-label>
+                <input matInput placeholder="اسحب الباركود" />
               </mat-form-field>
-              <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource2" matSort2>
-                  <ng-container matColumnDef="id">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      #
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.id }}</td>
-                  </ng-container>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>المجموعة</mat-label>
+                <mat-select>
+                  <mat-option value="option1">كارت شاشة</mat-option>
+                  <mat-option value="option2">ماوس</mat-option>
+                  <mat-option value="option3">كيبورد</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-                  <ng-container matColumnDef="name">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      الاسم
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.name }}</td>
-                  </ng-container>
+            <div class="col-12 mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource2" matSort #matSort2>
+                <ng-container matColumnDef="id">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    #
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+                </ng-container>
 
-                  <ng-container matColumnDef="barcode">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      الباركود
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
-                  </ng-container>
+                <ng-container matColumnDef="name">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الاسم
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+                </ng-container>
 
-                  <ng-container matColumnDef="pieces">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      الوحدة
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.pieces }}</td>
-                  </ng-container>
-                  <ng-container matColumnDef="quantity">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      الكمية
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.quantity }}</td>
-                  </ng-container>
-                  <ng-container matColumnDef="price">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      السعر
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.price }}</td>
-                  </ng-container>
-                  <ng-container matColumnDef="total">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      الاجمالي
-                    </th>
-                    <td mat-cell *matCellDef="let row">{{ row.total }}</td>
-                  </ng-container>
-                  <ng-container matColumnDef="delete">
-                    <th
-                      class="text-secondary display-1 fs-5"
-                      mat-header-cell
-                      *matHeaderCellDef
-                      mat-sort-header
-                    >
-                      حذف
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                      <button type="button" mat-icon-button>
-                        <mat-icon color="warn">delete</mat-icon>
-                      </button>
-                    </td>
-                  </ng-container>
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
-                  <tr
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumns2"
-                  ></tr>
+                <ng-container matColumnDef="barcode">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الباركود
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.barcode }}</td>
+                </ng-container>
 
-                  <tr class="mat-row" *matNoDataRow>
-                    <td
-                      class="mat-cell text-secondary display-1 fs-6 px-2"
-                      colspan="4"
-                    >
-                      لا يوجد بيانات مطابقة للبحث "{{ input.value }}"
-                    </td>
-                  </tr>
-                </table>
+                <ng-container matColumnDef="pieces">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الوحدة
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.pieces }}</td>
+                </ng-container>
+                <ng-container matColumnDef="quantity">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الكمية
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.quantity }}</td>
+                </ng-container>
+                <ng-container matColumnDef="price">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    السعر
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.price }}</td>
+                </ng-container>
+                <ng-container matColumnDef="total">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    الاجمالي
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.total }}</td>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                  >
+                    حذف
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <button type="button" mat-icon-button>
+                      <mat-icon color="warn">delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns2"
+                ></tr>
 
-                <mat-paginator
-                  paginator2
-                  [showFirstLastButtons]="true"
-                  previousPageLabel="السابق"
-                  nextPageLabel="التالي"
-                  itemsPerPageLabel="عدد العناصر"
-                  lastPageLabel="الاخير"
-                  firstPageLabel="الاول"
-                  [hidePageSize]="true"
-                  [pageSize]="5"
-                ></mat-paginator>
-              </div>
+                <tr class="mat-row" *matNoDataRow>
+                  <td
+                    class="mat-cell text-secondary display-1 fs-6 px-2"
+                    colspan="4"
+                  >
+                    لا يوجد بيانات
+                  </td>
+                </tr>
+              </table>
+
+              <mat-paginator
+                paginator2
+                [showFirstLastButtons]="true"
+                previousPageLabel="السابق"
+                nextPageLabel="التالي"
+                itemsPerPageLabel="عدد العناصر"
+                lastPageLabel="الاخير"
+                firstPageLabel="الاول"
+                [hidePageSize]="true"
+                [pageSize]="5"
+              ></mat-paginator>
             </div>
           </div>
-          <button type="button" mat-button matStepperNext>التالي</button>
-        </ng-template>
-      </mat-step>
-
-      <mat-step>
-        <ng-template matStepLabel>اضافة</ng-template>
-        <ng-template matStepContent>
-          <div class="d-flex justify-content-center">
-            <div class="row mt-1 mx-2 w-75">
-              <div class="col-6">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>الباركود</mat-label>
-                  <input matInput placeholder="اسحب الباركود" />
-                </mat-form-field>
-              </div>
-              <div class="col-6">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>المجموعة</mat-label>
+        </div>
+      </ng-template>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel> الفاتورة</ng-template>
+      <ng-template matStepContent>
+        <div class="d-flex justify-content-center">
+          <div
+            class="row w-75 border border-1 border-secondary rounded-3 px-3 pt-3 pb-2 m-1"
+          >
+            <div class="col-12 pb-3">
+              <mat-label
+                ><i class="bi bi-receipt pe-1"></i>تفاصيل الفاتورة
+              </mat-label>
+            </div>
+            <div class="col-7">
+              <div class="d-flex">
+                <a class="hand" (click)="addAgent()">
+                  <mat-icon color="primary" class="fs-3 mt-3 me-1"
+                    >add</mat-icon
+                  >
+                </a>
+                <mat-form-field appearance="outline">
+                  <mat-label>العميل</mat-label>
                   <mat-select>
-                    <mat-option value="option1">كارت شاشة</mat-option>
-                    <mat-option value="option2">ماوس</mat-option>
-                    <mat-option value="option3">كيبورد</mat-option>
+                    <mat-option value="1">اسلام</mat-option>
+                    <mat-option value="1">مصطفي</mat-option>
+                    <mat-option value="1">احمد</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="col-12">
-                <mat-form-field>
-                  <mat-label>بحث</mat-label>
-                  <input
-                    matInput
-                    (keyup)="modelsFilter($event)"
-                    placeholder="مثال . كارت شاشة"
-                    #input2
-                  />
-                </mat-form-field>
-
-                <div class="mat-elevation-z8">
-                  <table mat-table [dataSource]="dataSource3" matSort3>
-                    <ng-container matColumnDef="id">
-                      <th
-                        class="text-secondary display-1 fs-5"
-                        mat-header-cell
-                        *matHeaderCellDef
-                        mat-sort-header
-                      >
-                        #
-                      </th>
-                      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="name">
-                      <th
-                        class="text-secondary display-1 fs-5"
-                        mat-header-cell
-                        *matHeaderCellDef
-                        mat-sort-header
-                      >
-                        الاسم
-                      </th>
-                      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="description">
-                      <th
-                        class="text-secondary display-1 fs-5"
-                        mat-header-cell
-                        *matHeaderCellDef
-                        mat-sort-header
-                      >
-                        الوصف
-                      </th>
-                      <td mat-cell *matCellDef="let row">
-                        {{ row.description }}
-                      </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="attache">
-                      <th
-                        class="text-secondary display-1 fs-5"
-                        mat-header-cell
-                        *matHeaderCellDef
-                        mat-sort-header
-                      >
-                        الملحقات
-                      </th>
-                      <td mat-cell *matCellDef="let row">{{ row.attache }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="delete">
-                      <th
-                        class="text-secondary display-1 fs-5"
-                        mat-header-cell
-                        *matHeaderCellDef
-                        mat-sort-header
-                      >
-                        الرصيد
-                      </th>
-                      <td mat-cell *matCellDef="let row">
-                        <button type="button" mat-icon-button>
-                          <mat-icon color="warn">delete</mat-icon>
-                        </button>
-                      </td>
-                    </ng-container>
-                    <tr
-                      mat-header-row
-                      *matHeaderRowDef="displayedColumns3"
-                    ></tr>
-                    <tr
-                      mat-row
-                      *matRowDef="let row; columns: displayedColumns3"
-                    ></tr>
-
-                    <tr class="mat-row" *matNoDataRow>
-                      <td
-                        class="mat-cell text-secondary display-1 fs-6 px-2"
-                        colspan="4"
-                      >
-                        لا يوجد بيانات مطابقة للبحث "{{ input2.value }}"
-                      </td>
-                    </tr>
-                  </table>
-
-                  <mat-paginator
-                    paginator3
-                    [showFirstLastButtons]="true"
-                    previousPageLabel="السابق"
-                    nextPageLabel="التالي"
-                    itemsPerPageLabel="عدد العناصر"
-                    lastPageLabel="الاخير"
-                    firstPageLabel="الاول"
-                    [hidePageSize]="true"
-                    [pageSize]="5"
-                  ></mat-paginator>
-                </div>
-              </div>
+            </div>
+            <div class="col-5">
+              <mat-form-field appearance="outline">
+                <mat-label> التاريخ</mat-label>
+                <input title="date" matInput [matDatepicker]="picker" />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-12">
+              <mat-radio-group aria-label="Select an option">
+                <mat-radio-button value="1">نقدي</mat-radio-button>
+                <mat-radio-button value="2">شبكة</mat-radio-button>
+              </mat-radio-group>
             </div>
           </div>
-          <button type="button" mat-button matStepperPrevious>السابق</button>
-          <button type="button" mat-button matStepperNext>التالي</button>
-        </ng-template>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel> الفاتورة</ng-template>
-        <ng-template matStepContent>
-          <div class="d-flex justify-content-center">
-            <div
-              class="row w-75 border border-1 border-secondary rounded-3 px-3 pt-3 pb-2 m-1"
-            >
-              <div class="col-12 pb-3">
-                <mat-label
-                  ><i class="bi bi-receipt pe-1"></i>تفاصيل الفاتورة
-                </mat-label>
-              </div>
-              <div class="col-7">
-                <div class="d-flex">
-                  <a class="hand" (click)="addAgent()">
-                    <mat-icon color="primary" class="fs-3 mt-3 me-1"
-                      >add</mat-icon
-                    >
-                  </a>
-                  <mat-form-field appearance="outline">
-                    <mat-label>العميل</mat-label>
-                    <mat-select>
-                      <mat-option value="1">اسلام</mat-option>
-                      <mat-option value="1">مصطفي</mat-option>
-                      <mat-option value="1">احمد</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="col-5">
-                <mat-form-field appearance="outline">
-                  <mat-label> التاريخ</mat-label>
-                  <input title="date" matInput [matDatepicker]="picker" />
-                  <mat-datepicker-toggle
-                    matIconSuffix
-                    [for]="picker"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div class="col-12">
+        </div>
+        <div class="d-flex justify-content-center">
+          <div
+            class="row w-75 border border-1 border-secondary rounded-3 px-3 pt-3 pb-2 m-1"
+          >
+            <div class="col-12 pb-3">
+              <mat-label><i class="bi bi-cash pe-1"></i>الدفع</mat-label>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>الاجمالي</mat-label>
+                <input disabled value="100" matInput placeholder="الاجمالي" />
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>المدفوع</mat-label>
+                <input matInput placeholder="المدفوع" />
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>الضريبة</mat-label>
+                <input disabled value="15" matInput placeholder="الضريبة" />
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>الباقي</mat-label>
+                <input disabled value="100" matInput placeholder="الباقي" />
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="w-100" appearance="outline">
+                <mat-label>الاجمالي بعد الضريبة</mat-label>
+                <input
+                  disabled
+                  value="115"
+                  matInput
+                  placeholder="الاجمالي بعد الضريبة"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <div class="d-flex justify-content-between">
                 <mat-radio-group aria-label="Select an option">
                   <mat-radio-button value="1">نقدي</mat-radio-button>
-                  <mat-radio-button value="2">شبكة</mat-radio-button>
+                  <mat-radio-button value="2">اجل</mat-radio-button>
                 </mat-radio-group>
+                <button
+                  class="w-25"
+                  mat-flat-button
+                  color="primary"
+                  type="button"
+                >
+                  ادفع <i class="bi bi-currency-dollar mt-1"></i>
+                </button>
               </div>
             </div>
           </div>
-          <div class="d-flex justify-content-center">
-            <div
-              class="row w-75 border border-1 border-secondary rounded-3 px-3 pt-3 pb-2 m-1"
-            >
-              <div class="col-12 pb-3">
-                <mat-label><i class="bi bi-cash pe-1"></i>الدفع</mat-label>
-              </div>
-              <div class="col-6">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>الاجمالي</mat-label>
-                  <input disabled value="100" matInput placeholder="الاجمالي" />
-                </mat-form-field>
-              </div>
-              <div class="col-6">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>المدفوع</mat-label>
-                  <input matInput placeholder="المدفوع" />
-                </mat-form-field>
-              </div>
-              <div class="col-6">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>الضريبة</mat-label>
-                  <input disabled value="15" matInput placeholder="الضريبة" />
-                </mat-form-field>
-              </div>
-              <div class="col-6">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>الباقي</mat-label>
-                  <input disabled value="100" matInput placeholder="الباقي" />
-                </mat-form-field>
-              </div>
-              <div class="col-6">
-                <mat-form-field class="w-100" appearance="outline">
-                  <mat-label>الاجمالي بعد الضريبة</mat-label>
-                  <input
-                    disabled
-                    value="115"
-                    matInput
-                    placeholder="الاجمالي بعد الضريبة"
-                  />
-                </mat-form-field>
-              </div>
-              <div class="col-6">
-                <div class="d-flex justify-content-between">
-                  <mat-radio-group aria-label="Select an option">
-                    <mat-radio-button value="1">نقدي</mat-radio-button>
-                    <mat-radio-button value="2">اجل</mat-radio-button>
-                  </mat-radio-group>
-                  <button
-                    class="w-25"
-                    mat-flat-button
-                    color="primary"
-                    type="button"
-                  >
-                    ادفع <i class="bi bi-currency-dollar mt-1"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button type="button" mat-button matStepperPrevious>السابق</button>
-        </ng-template>
-      </mat-step>
-    </mat-stepper>
-  </div>
+        </div>
+      </ng-template>
+    </mat-step>
+  </mat-stepper>
 </div>

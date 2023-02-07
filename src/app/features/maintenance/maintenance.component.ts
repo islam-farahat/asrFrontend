@@ -34,7 +34,14 @@ export interface Models {
   styleUrls: ['./maintenance.component.scss'],
 })
 export class MaintenanceComponent implements AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'pieces', 'charge', 'price'];
+  displayedColumns: string[] = [
+    'id',
+    'name',
+    'pieces',
+    'charge',
+    'price',
+    'add',
+  ];
   displayedColumns2: string[] = [
     'id',
     'name',
@@ -69,35 +76,35 @@ export class MaintenanceComponent implements AfterViewInit {
     const users: UserData[] = [
       {
         id: '1',
-        name: 'Hydrogen',
+        name: 'islam',
         pieces: '1',
         charge: '1',
         price: '1',
       },
       {
         id: '2',
-        name: 'Helium',
+        name: 'ahmed',
         pieces: '1',
         charge: '1',
         price: '1',
       },
       {
         id: '3',
-        name: 'Hydrogen',
+        name: 'mohamed',
         pieces: '1',
         charge: '1',
         price: '1',
       },
       {
         id: '4',
-        name: 'Helium',
+        name: 'said',
         pieces: '1',
         charge: '1',
         price: '1',
       },
       {
         id: '5',
-        name: 'Helium',
+        name: 'ali',
         pieces: '1',
         charge: '1',
         price: '1',
@@ -175,6 +182,12 @@ export class MaintenanceComponent implements AfterViewInit {
         description: '1',
         attache: '1',
       },
+      {
+        id: '5',
+        name: 'Helium',
+        description: '1',
+        attache: '1',
+      },
     ];
     this.dataSource = new MatTableDataSource(users);
     this.dataSource2 = new MatTableDataSource(category);
@@ -207,9 +220,17 @@ export class MaintenanceComponent implements AfterViewInit {
     }
   }
   addAgent() {
-    this.dialog.open(AddAgentComponent);
+    this.dialog.open(AddAgentComponent, {
+      disableClose: true,
+      width: '400px',
+      height: '300px',
+    });
   }
   addModel() {
-    this.dialog.open(AddModelComponent);
+    this.dialog.open(AddModelComponent, {
+      disableClose: true,
+      width: '500px',
+      height: '520px',
+    });
   }
 }
