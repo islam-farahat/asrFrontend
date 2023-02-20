@@ -1,79 +1,95 @@
+import { Model } from './../../models/model';
+import { ModelService } from './../../services/model.service';
 import { AddNewModelComponent } from './../add-new-model/add-new-model.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { ENTER } from '@angular/cdk/keycodes';
 import { ElementRef, ViewChild } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { ProductModel } from '../../models/product-model';
 @Component({
   selector: 'app-add-model',
   templateUrl: './add-model.component.html',
   styleUrls: ['./add-model.component.scss'],
 })
 export class AddModelComponent implements OnInit {
-  @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
+  modelForm = this.fb.group({
+    model: ['', Validators.required],
+    name: ['', Validators.required],
+    description: ['', Validators.required],
+    attachment: [''],
+  });
 
-  myControl = new FormControl('');
-  options: string[] = ['HP', 'Apple', 'Dell', 'Lenovo', 'Asus'];
-  filteredOptions!: Observable<string[]>;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl('');
-  filteredFruits!: Observable<string[]>;
-  fruits: string[] = [];
-  allFruits: string[] = ['ماوس', 'كيبورد', 'شاشة', 'سماعات', 'كارت شاشة'];
+  @ViewChild('attachmentInput') attachmentInput!: ElementRef<HTMLInputElement>;
+
+  filteredModels!: Observable<string[]>;
+  filteredAttachments!: Observable<string[]>;
+  models!: string[];
+  attachments: string[] = [];
+
+  separatorKeysCodes: number[] = [ENTER];
+  allAttachments: string[] = ['ماوس', 'كيبورد', 'شاشة', 'سماعات', 'كارت شاشة'];
 
   ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value || ''))
-    );
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+    this.model.getModelsNames().subscribe((data: Model[]) => {
+      this.models = data.map((model) => model.name_ar);
+      this.filteredModels = this.modelForm.controls['model'].valueChanges.pipe(
+        startWith(''),
+        map((value) => this.filterModels(value || ''))
+      );
+    });
+
+    this.filteredAttachments = this.modelForm.controls[
+      'attachment'
+    ].valueChanges.pipe(
       startWith(null),
-      map((fruit: string | null) =>
-        fruit ? this._filter1(fruit) : this.allFruits.slice()
+      map((attachment: string | null) =>
+        attachment
+          ? this.filterAttachment(attachment)
+          : this.allAttachments.slice()
       )
     );
   }
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private model: ModelService,
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<AddModelComponent>
+  ) {}
 
-  add(event: MatChipInputEvent): void {
+  addAttachment(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (value) {
-      this.fruits.push(value);
+      this.attachments.push(value);
     }
     event.chipInput!.clear();
-    this.fruitCtrl.setValue(null);
+    this.modelForm.controls['attachment'].setValue(null);
   }
 
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
+  removeAttachment(attachment: string): void {
+    const index = this.attachments.indexOf(attachment);
 
     if (index >= 0) {
-      this.fruits.splice(index, 1);
+      this.attachments.splice(index, 1);
     }
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
-    this.fruitInput.nativeElement.value = '';
-    this.fruitCtrl.setValue(null);
+  selectedAttachment(event: MatAutocompleteSelectedEvent): void {
+    this.attachments.push(event.option.viewValue);
+    this.attachmentInput.nativeElement.value = '';
+    this.modelForm.controls['attachment'].setValue(null);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.options.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+  filterModels(value: string): string[] {
+    return this.models.filter((model) => model.includes(value));
   }
-  private _filter1(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allFruits.filter((fruit) =>
-      fruit.toLowerCase().includes(filterValue)
+  filterAttachment(value: string): string[] {
+    return this.allAttachments.filter((attachment) =>
+      attachment.includes(value)
     );
   }
 
@@ -82,6 +98,18 @@ export class AddModelComponent implements OnInit {
       width: '500px',
       height: '200px',
       disableClose: true,
+    });
+  }
+  saveModel() {
+    const model = this.modelForm.value;
+    const modelData: ProductModel = {
+      model: model.model!,
+      name: model.name!,
+      description: model.description!,
+      attachment: String(this.attachments),
+    };
+    this.dialogRef.close({
+      modelData,
     });
   }
 }
