@@ -17,6 +17,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const modules = [
   MatToolbarModule,
@@ -38,6 +39,7 @@ const modules = [
   FormsModule,
   MatChipsModule,
   MatSortModule,
+  MatSnackBarModule,
 ];
 @NgModule({
   imports: [modules],

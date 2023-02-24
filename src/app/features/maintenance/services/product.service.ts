@@ -12,4 +12,9 @@ export class ProductService {
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(environment.apiUrl + '/parts');
   }
+  getProductByBarcode(barcode: string): Observable<Product> {
+    return this.http.get<Product>(
+      environment.apiUrl + '/get-products-by-barcode/' + barcode
+    );
+  }
 }

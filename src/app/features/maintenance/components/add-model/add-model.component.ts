@@ -19,7 +19,6 @@ import { ProductModel } from '../../models/product-model';
 export class AddModelComponent implements OnInit {
   modelForm = this.fb.group({
     model: ['', Validators.required],
-    name: ['', Validators.required],
     description: ['', Validators.required],
     attachment: [''],
   });
@@ -104,7 +103,6 @@ export class AddModelComponent implements OnInit {
     const model = this.modelForm.value;
     const modelData: ProductModel = {
       model: model.model!,
-      name: model.name!,
       description: model.description!,
       attachment: String(this.attachments),
     };
