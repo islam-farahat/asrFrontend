@@ -11,11 +11,13 @@ export class CustomerService {
   constructor(private http: HttpClient) {}
 
   getCustomers(): Observable<Customer[]> {
-    return this.http.get<Customer[]>(environment.apiUrl + '/customers');
+    return this.http.get<Customer[]>(
+      environment.apiUrl + '/maintainance/customers'
+    );
   }
   addCustomer(customer: Customer): Observable<Customer> {
     return this.http.post<Customer>(
-      environment.apiUrl + '/customers',
+      environment.apiUrl + '/maintainance/customers',
       customer
     );
   }

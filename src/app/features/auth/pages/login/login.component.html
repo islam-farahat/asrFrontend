@@ -1,0 +1,64 @@
+<div class="position-relative">
+  <div class="position-absolute bg-image vh-100 vw-100"></div>
+  <div class="container-fluid">
+    <div class="row vh-100 justify-content-center px-3 px-sm-0">
+      <form
+        [formGroup]="login"
+        (ngSubmit)="submit()"
+        class="col-12 bg-light align-self-center login-size"
+      >
+        <mat-card class="p-3">
+          <div class="row">
+            <div class="col-12 justify-content-center d-flex">
+              <a class="nav-link link-primary" routerLink=""> لغات العصر </a>
+            </div>
+
+            <div class="col-12">
+              <mat-label>الايميل</mat-label>
+              <mat-form-field class="w-100" appearance="outline">
+                <input
+                  formControlName="email"
+                  type="email"
+                  matInput
+                  placeholder="company@mail.com"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-12">
+              <mat-label>الباسورد</mat-label>
+              <mat-form-field class="w-100" appearance="outline">
+                <input
+                  formControlName="password"
+                  type="password"
+                  matInput
+                  placeholder="......."
+                />
+                <!-- <mat-icon matSuffix>visibility</mat-icon> -->
+              </mat-form-field>
+            </div>
+
+            <div class="col-12">
+              <button
+                class="w-100"
+                type="submit"
+                mat-flat-button
+                color="primary"
+              >
+                تسجيل الدخول
+              </button>
+            </div>
+            <!-- <div class="col-12 pt-2 pb-2 text-center">
+              <h4>
+                <a
+                  routerLink="/user/forgot-password"
+                  class="nav-link link-primary"
+                  >Forgot your password?</a
+                >
+              </h4>
+            </div> -->
+          </div>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</div>

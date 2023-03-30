@@ -10,11 +10,11 @@ import { Observable } from 'rxjs';
 export class ProductService {
   constructor(private http: HttpClient) {}
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(environment.apiUrl + '/parts');
+    return this.http.get<Product[]>(environment.apiUrl + '/maintainance/parts');
   }
   getProductByBarcode(barcode: string): Observable<Product> {
     return this.http.get<Product>(
-      environment.apiUrl + '/get-products-by-barcode/' + barcode
+      environment.apiUrl + '/maintainance/get-products-by-barcode/' + barcode
     );
   }
 }

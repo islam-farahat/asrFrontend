@@ -1,11 +1,18 @@
-import { MaintenanceComponent } from './features/maintenance/maintenance.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    component: MaintenanceComponent,
+    loadChildren: () =>
+      import('./features/maintenance/maintenance.module').then(
+        (m) => m.MaintenanceModule
+      ),
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
 ];
 

@@ -18,6 +18,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 
 const modules = [
   MatToolbarModule,
@@ -40,6 +45,11 @@ const modules = [
   MatChipsModule,
   MatSortModule,
   MatSnackBarModule,
+  MatSidenavModule,
+  MatListModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatMenuModule,
 ];
 @NgModule({
   imports: [modules],

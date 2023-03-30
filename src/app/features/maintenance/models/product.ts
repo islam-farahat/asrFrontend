@@ -8,5 +8,5 @@ export interface Product {
   name_ar: string;
   quantity: string;
   type: string;
-  api_prices: Api_prices[];
+  api_prices?: Api_prices[];
 }

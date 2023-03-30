@@ -10,6 +10,8 @@ import { environment } from 'src/environments/environment';
 export class ProductPriceService {
   constructor(private http: HttpClient) {}
   getProductPrice(id: number): Observable<ProductPrice> {
-    return this.http.get<ProductPrice>(environment.apiUrl + '/prices/' + id);
+    return this.http.get<ProductPrice>(
+      environment.apiUrl + '/maintainance/prices/' + id
+    );
   }
 }

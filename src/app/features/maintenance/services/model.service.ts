@@ -10,9 +10,12 @@ import { Injectable } from '@angular/core';
 export class ModelService {
   constructor(private http: HttpClient) {}
   getModelsNames(): Observable<Model[]> {
-    return this.http.get<Model[]>(environment.apiUrl + '/models');
+    return this.http.get<Model[]>(environment.apiUrl + '/maintainance/models');
   }
   addModelName(model: Model): Observable<Model> {
-    return this.http.post<Model>(environment.apiUrl + '/models', model);
+    return this.http.post<Model>(
+      environment.apiUrl + '/maintainance/models',
+      model
+    );
   }
 }

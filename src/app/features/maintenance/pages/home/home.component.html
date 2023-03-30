@@ -1,0 +1,479 @@
+<div class="container-fluid pt-1 px-0">
+  <mat-stepper horizontal="horizontal" class="w-100">
+    <mat-step>
+      <ng-template matStepLabel>الموديلات</ng-template>
+      <ng-template matStepContent>
+        <div class="d-flex justify-content-center mt-3 mx-2">
+          <div class="w-75">
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="modelDataSource">
+                <ng-container matColumnDef="model">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                  >
+                    الموديل
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.model }}</td>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                  >
+                    الوصف
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.description }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="attachment">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                  >
+                    الملحقات
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.attachment }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                  <th
+                    class="text-secondary display-1 fs-5"
+                    mat-header-cell
+                    *matHeaderCellDef
+                  >
+                    حذف
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <button
+                      (click)="deleteProduct(row.id)"
+                      type="button"
+                      mat-icon-button
+                    >
+                      <mat-icon color="warn">delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="modelsColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: modelsColumns"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                  <td
+                    class="mat-cell text-secondary display-1 fs-6 p-2"
+                    colspan="4"
+                  >
+                    لا يوجد بيانات
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <button
+          mat-fab
+          color="primary"
+          class="position-fixed bottom-0 start-0 m-3"
+          (click)="addModel()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </ng-template>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>اضافة</ng-template>
+      <ng-template matStepContent>
+        <div class="row">
+          <div class="col-4">
+            <div class="row">
+              <div class="col-12">
+                <mat-form-field appearance="outline">
+                  <mat-label>بحث</mat-label>
+                  <input
+                    matInput
+                    (keyup)="productFilter($event)"
+                    placeholder="مثال . كارت شاشة"
+                    #input2
+                  />
+                </mat-form-field>
+                <section class="product-table mat-elevation-z8" tabindex="0">
+                  <table mat-table [dataSource]="productDataSource">
+                    <ng-container matColumnDef="name">
+                      <th
+                        class="text-secondary display-1 fs-5"
+                        mat-header-cell
+                        *matHeaderCellDef
+                      >
+                        الاسم
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.name_ar }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="quantity">
+                      <th
+                        class="text-secondary display-1 fs-5"
+                        mat-header-cell
+                        *matHeaderCellDef
+                      >
+                        الكمية
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.quantity }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="add">
+                      <th
+                        class="text-secondary display-1 fs-5"
+                        mat-header-cell
+                        *matHeaderCellDef
+                      >
+                        اضافة
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <button
+                          (click)="add(row)"
+                          type="button"
+                          mat-icon-button
+                        >
+                          <mat-icon color="primary">add</mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+                    <tr
+                      mat-header-row
+                      *matHeaderRowDef="productColumns; sticky: true"
+                    ></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: productColumns"
+                    ></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                      <td
+                        class="mat-cell text-secondary display-1 fs-6 px-2"
+                        colspan="4"
+                      >
+                        لا يوجد بيانات
+                      </td>
+                    </tr>
+                  </table>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>الباركود</mat-label>
+                  <input
+                    #barcode
+                    (keydown.enter)="getProductByBarcode($event)"
+                    matInput
+                    placeholder="اسحب الباركود"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-12">
+                <table
+                  mat-table
+                  [dataSource]="categoryDataSource"
+                  class="mat-elevation-z8"
+                >
+                  <ng-container matColumnDef="name">
+                    <th
+                      class="text-secondary display-1 fs-5"
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                      الاسم
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ row.name_ar }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="pieces">
+                    <th
+                      class="text-secondary display-1 fs-5"
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                      الوحدة
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <select
+                        (change)="changePiece(row.id, $event)"
+                        [value]="row.pieces[0]"
+                        class="form-select"
+                        aria-label="pieces type"
+                      >
+                        <option
+                          [value]="piece"
+                          *ngFor="let piece of row.pieces"
+                        >
+                          {{ piece }}
+                        </option>
+                      </select>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="quantity">
+                    <th
+                      class="text-secondary text-center display-1 fs-5"
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                      الكمية
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <div
+                        class="d-flex justify-content-around align-items-center"
+                      >
+                        <button
+                          (click)="increaseQuantity(row.id)"
+                          mat-icon-button
+                          type="button"
+                        >
+                          <mat-icon class="text-secondary">add</mat-icon>
+                        </button>
+                        <span> {{ row.quantity }}</span>
+                        <button
+                          (click)="decreaseQuantity(row.id)"
+                          mat-icon-button
+                          type="button"
+                        >
+                          <mat-icon class="text-secondary">remove</mat-icon>
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="price">
+                    <th
+                      class="text-secondary display-1 fs-5"
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                      السعر
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <input
+                        (change)="changePrice(row.id, $event)"
+                        placeholder="السعر"
+                        class="form-control price-size"
+                        type="number"
+                        min="0"
+                        [value]="row.price"
+                      />
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="total">
+                    <th
+                      class="text-secondary display-1 fs-5"
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                      الاجمالي
+                    </th>
+                    <td mat-cell *matCellDef="let row">{{ row.total }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="delete">
+                    <th
+                      class="text-secondary display-1 fs-5"
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                      حذف
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <button
+                        (click)="deleteCategory(row.id)"
+                        type="button"
+                        mat-icon-button
+                      >
+                        <mat-icon color="warn">delete</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="categoryColumns"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: categoryColumns"
+                  ></tr>
+
+                  <tr class="mat-row" *matNoDataRow>
+                    <td
+                      class="mat-cell text-secondary display-1 fs-6 p-2"
+                      colspan="4"
+                    >
+                      لا يوجد بيانات
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel> الفاتورة</ng-template>
+      <ng-template matStepContent>
+        <form [formGroup]="invoiceForm" (ngSubmit)="printInvoice()">
+          <div class="d-flex justify-content-center">
+            <div
+              class="row w-75 border border-1 border-secondary rounded-3 px-3 pt-3 pb-2 m-1"
+            >
+              <div class="col-12 pb-3">
+                <mat-label
+                  ><i class="bi bi-receipt pe-1"></i>تفاصيل الفاتورة
+                </mat-label>
+              </div>
+              <div class="col-7">
+                <div class="d-flex">
+                  <a class="hand" (click)="addAgent()">
+                    <mat-icon color="primary" class="fs-3 mt-3 me-1"
+                      >add</mat-icon
+                    >
+                  </a>
+                  <mat-form-field appearance="outline">
+                    <mat-label>العميل</mat-label>
+                    <mat-select formControlName="customer">
+                      <mat-option
+                        *ngFor="let customer of customers"
+                        [value]="customer.id"
+                      >
+                        {{ customer.name_ar }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-5">
+                <mat-form-field appearance="outline">
+                  <mat-label> التاريخ</mat-label>
+                  <input
+                    type="datetime"
+                    formControlName="date"
+                    title="date"
+                    matInput
+                    [matDatepicker]="picker"
+                  />
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <mat-radio-group
+                  formControlName="paymentMethod"
+                  aria-label="Select an option"
+                >
+                  <mat-radio-button value="cash">نقدي</mat-radio-button>
+                  <mat-radio-button value="network">شبكة</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <div
+              class="row w-75 border border-1 border-secondary rounded-3 px-3 pt-3 pb-2 m-1"
+            >
+              <div class="col-12 pb-3">
+                <mat-label><i class="bi bi-cash pe-1"></i>الدفع</mat-label>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>الاجمالي</mat-label>
+                  <input
+                    formControlName="price"
+                    matInput
+                    placeholder="الاجمالي"
+                    type="number"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>المدفوع</mat-label>
+                  <input
+                    (change)="pay($event)"
+                    formControlName="paid"
+                    matInput
+                    placeholder="المدفوع"
+                    type="number"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>الضريبة</mat-label>
+                  <input
+                    formControlName="vat"
+                    type="number"
+                    matInput
+                    placeholder="الضريبة"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>الباقي</mat-label>
+                  <input
+                    formControlName="change"
+                    type="number"
+                    matInput
+                    placeholder="الباقي"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>الاجمالي بعد الضريبة</mat-label>
+                  <input
+                    formControlName="total"
+                    type="number"
+                    matInput
+                    placeholder="الاجمالي بعد الضريبة"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <div class="d-flex justify-content-between">
+                  <mat-radio-group
+                    formControlName="paymentWay"
+                    aria-label="Select an option"
+                  >
+                    <mat-radio-button value="cash">نقدي</mat-radio-button>
+                    <mat-radio-button value="credit">اجل</mat-radio-button>
+                  </mat-radio-group>
+                  <button
+                    class="w-25"
+                    mat-flat-button
+                    color="primary"
+                    type="submit"
+                  >
+                    ادفع <i class="bi bi-currency-dollar mt-1"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+    </mat-step>
+  </mat-stepper>
+</div>

@@ -1,0 +1,10 @@
+.bg-image {
+  // background-image: url("/assets/images/login-bg.jpg");
+  background-image: url("https://ik.imagekit.io/naidimg/login-bg.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1669635724507");
+  background-size: cover;
+  -webkit-filter: blur(3px);
+  filter: blur(3px);
+}
+.login-size {
+  width: 500px;
+}
