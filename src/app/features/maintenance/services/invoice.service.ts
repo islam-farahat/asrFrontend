@@ -30,4 +30,13 @@ export class InvoiceService {
       environment.apiUrl + '/maintainance/invoices/' + id
     );
   }
+  dateFilter(start: string, end: string): Observable<GetInvoice> {
+    return this.http.get<GetInvoice>(
+      environment.apiUrl +
+        '/maintainance/invoices?date_from=' +
+        start +
+        '&date_to=' +
+        end
+    );
+  }
 }

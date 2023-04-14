@@ -75,14 +75,23 @@ export class InvoicesComponent implements AfterViewInit {
     }
   }
   find() {
-    // this.invoiceService
-    //   .getInvoices({
-    //     date_from: moment(this.date.value.start).format('yyyy-MM-DD'),
-    //     date_to: moment(this.date.value.end).format('yyyy-MM-DD'),
-    //   })
-    //   .subscribe((invoices) => {
-    //     console.log(invoices);
-    //   });
+    this.invoiceService
+      .dateFilter(
+        moment(this.date.value.start).format('yyyy-MM-DD'),
+        moment(this.date.value.end).format('yyyy-MM-DD')
+      )
+      .subscribe({
+        next: (invoices) => {
+          this.invoice = invoices;
+        },
+        complete: () => {
+          this.dataSource = new MatTableDataSource(this.invoice.data);
+          this.paginator.length = this.invoice.total;
+          this.paginator.pageSize = this.invoice.per_page;
+          this.paginator.pageIndex = this.invoice.current_page - 1;
+          this.dataSource.sort = this.sort;
+        },
+      });
   }
 
   edit(invoice: Invoice) {
