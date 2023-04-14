@@ -22,7 +22,15 @@ export class InvoicesComponent implements AfterViewInit {
     start: ['', Validators.required],
     end: ['', Validators.required],
   });
-  displayedColumns: string[] = ['id', 'name', 'total', 'date', 'edit', 'print'];
+  displayedColumns: string[] = [
+    'id',
+    'name',
+    'total',
+    'date',
+    'status',
+    'edit',
+    'print',
+  ];
   dataSource: MatTableDataSource<Invoice> = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -51,6 +59,9 @@ export class InvoicesComponent implements AfterViewInit {
         this.dataSource.sort = this.sort;
       },
     });
+  }
+  toggle(event: any, id: number) {
+    // console.log(event.checked);
   }
   page(event: any) {
     this.invoiceService.getInvoiceByPage(event.pageIndex + 1).subscribe({
