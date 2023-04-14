@@ -279,7 +279,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
                   model_id: model.id!,
                 };
               }),
-              invoice_items: this.category.map((category) => {
+              items: this.category.map((category) => {
                 return {
                   part_id: category.id!,
                   quantity: Number(category.quantity)!,

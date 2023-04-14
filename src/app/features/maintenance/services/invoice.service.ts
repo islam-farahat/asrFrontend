@@ -1,4 +1,4 @@
-import { Invoice } from './../models/invoice';
+import { GetInvoice, Invoice } from './../models/invoice';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -15,10 +15,19 @@ export class InvoiceService {
       invoice
     );
   }
-  getInvoices(obj: any): Observable<Invoice[]> {
-    return this.http.post<Invoice[]>(
-      environment.apiUrl + '/maintainance/invoices',
-      obj
+  getInvoices(): Observable<GetInvoice> {
+    return this.http.get<GetInvoice>(
+      environment.apiUrl + '/maintainance/invoices'
+    );
+  }
+  getInvoiceByPage(page: number): Observable<GetInvoice> {
+    return this.http.get<GetInvoice>(
+      environment.apiUrl + '/maintainance/invoices?page=' + page
+    );
+  }
+  getInvoiceById(id: number): Observable<Invoice> {
+    return this.http.get<Invoice>(
+      environment.apiUrl + '/maintainance/invoices/' + id
     );
   }
 }

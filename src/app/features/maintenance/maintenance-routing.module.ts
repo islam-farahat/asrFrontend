@@ -17,6 +17,11 @@ const routes: Routes = [
         path: 'invoices',
         component: InvoicesComponent,
       },
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
     ],
   },
 ];

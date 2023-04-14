@@ -2,7 +2,7 @@ import { BarcodeService } from './../../services/barcode.service';
 import { EditInvoiceComponent } from './../../components/edit-invoice/edit-invoice.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Invoice } from './../../models/invoice';
+import { GetInvoice, Invoice } from './../../models/invoice';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -22,76 +22,67 @@ export class InvoicesComponent implements AfterViewInit {
     start: ['', Validators.required],
     end: ['', Validators.required],
   });
-  displayedColumns: string[] = ['id', 'total', 'date', 'edit', 'print'];
-  dataSource: MatTableDataSource<Invoice>;
+  displayedColumns: string[] = ['id', 'name', 'total', 'date', 'edit', 'print'];
+  dataSource: MatTableDataSource<Invoice> = new MatTableDataSource();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   qr: string = '';
+  invoice!: GetInvoice;
 
   constructor(
     private invoiceService: InvoiceService,
     private fb: FormBuilder,
     private dialog: MatDialog,
     private qrService: BarcodeService
-  ) {
-    invoiceService.getInvoices({}).subscribe((invoices) => {
-      console.log(invoices);
-    });
-    const invoices: Invoice[] = [
-      {
-        id: 1,
-        customer_id: 1,
-        date: '2021-01-01',
-        grand_total: 100,
-        invoice_type: 'type',
-        payment_method: 'method',
-        tax: 10,
-        total: 90,
-        models: [
-          {
-            attachments: 'attachments',
-            description: 'description',
-            model_id: 1,
-          },
-        ],
-        invoice_items: [
-          {
-            part_id: 1,
-            quantity: 1,
-            selling_price: 1,
-            unit_id: 1,
-          },
-        ],
-      },
-    ];
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(invoices);
-  }
+  ) {}
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.invoiceService.getInvoices().subscribe({
+      next: (invoices) => {
+        this.invoice = invoices;
+      },
+
+      complete: () => {
+        this.dataSource = new MatTableDataSource(this.invoice.data);
+        this.paginator.length = this.invoice.total;
+        this.paginator.pageSize = this.invoice.per_page;
+        this.paginator.pageIndex = this.invoice.current_page - 1;
+        this.dataSource.sort = this.sort;
+      },
+    });
+  }
+  page(event: any) {
+    this.invoiceService.getInvoiceByPage(event.pageIndex + 1).subscribe({
+      next: (invoices) => {
+        this.invoice = invoices;
+      },
+      complete: () => {
+        this.dataSource = new MatTableDataSource(this.invoice.data);
+        this.paginator.length = this.invoice.total;
+        this.paginator.pageSize = this.invoice.per_page;
+        this.paginator.pageIndex = this.invoice.current_page - 1;
+        this.dataSource.sort = this.sort;
+      },
+    });
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
   find() {
-    this.invoiceService
-      .getInvoices({
-        date_from: moment(this.date.value.start).format('yyyy-MM-DD'),
-        date_to: moment(this.date.value.end).format('yyyy-MM-DD'),
-      })
-      .subscribe((invoices) => {
-        console.log(invoices);
-      });
+    // this.invoiceService
+    //   .getInvoices({
+    //     date_from: moment(this.date.value.start).format('yyyy-MM-DD'),
+    //     date_to: moment(this.date.value.end).format('yyyy-MM-DD'),
+    //   })
+    //   .subscribe((invoices) => {
+    //     console.log(invoices);
+    //   });
   }
 
   edit(invoice: Invoice) {
@@ -116,7 +107,11 @@ export class InvoicesComponent implements AfterViewInit {
           this.qr = String(result);
         },
         complete: () => {
-          this.printInvoice(invoice);
+          this.invoiceService.getInvoiceById(invoice.id!).subscribe({
+            next: (obj) => {
+              this.printInvoice(obj);
+            },
+          });
         },
       });
   }
@@ -128,7 +123,8 @@ export class InvoicesComponent implements AfterViewInit {
         model: model.model_id,
       };
     });
-    const categoryBody = invoice.invoice_items.map((category) => {
+
+    const categoryBody = invoice.items.map((category) => {
       return {
         name_ar: category.part_id,
         quantity: category.quantity,
@@ -161,10 +157,6 @@ export class InvoicesComponent implements AfterViewInit {
 
     pdf.setFontSize(12);
 
-    // const customer: Customer = this.customers.find(
-    //   (customer) => customer.id == this.invoiceForm.value.customer
-    // )!;
-
     autoTable(pdf, {
       margin: {
         top: 43,
@@ -176,9 +168,12 @@ export class InvoicesComponent implements AfterViewInit {
       tableWidth: pdf.internal.pageSize.getWidth(),
       bodyStyles: { font: 'Amiri', halign: 'right' },
       body: [
-        [invoice.customer_id, 'اسم العميل'],
-        [invoice.customer_id ? invoice.customer_id : 'لا يوجد', 'الهاتف'],
-        [invoice.date, 'التاريخ'],
+        [invoice.customer!.name_ar, 'اسم العميل'],
+        [
+          invoice.customer!.phone1 ? invoice.customer!.phone1 : 'لا يوجد',
+          'الهاتف',
+        ],
+        [invoice.created_at!, 'التاريخ'],
       ],
     });
 
